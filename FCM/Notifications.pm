@@ -7,7 +7,7 @@ use JSON;
 use Data::Dumper;
 use FCM::Constants;
 
-extends 'BL::FCM';
+extends 'FCM';
 
 has to                  => ( is => 'rw', isa => 'Str' );
 has topic               => ( is => 'rw', isa => 'Str' );
