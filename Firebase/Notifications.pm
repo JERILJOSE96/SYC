@@ -52,11 +52,11 @@ sub sendToTopic {
 
 sub sendToDevices {
 
-    my ($self) = shift;
+    my ($self, $registration_ids) = @_;
 
     $data{data}             = $self->{data} if (defined $self->{data});
     $data{notification}     = $self->{notification} if (defined $self->{notification});
-    $data{registration_ids} = $self->{topic} if (defined $self->{registration_ids});
+    $data{registration_ids} = $registration_ids;
 
     my $payload = JSON::objToJson(\%data);
 
