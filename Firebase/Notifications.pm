@@ -1,6 +1,5 @@
 package Firebase::Notifications;
 
-use Data::Dumper;
 use HTTP::Request::Common;
 use JSON;
 use LWP::UserAgent;
@@ -17,8 +16,9 @@ sub new {
         to                => $args{ to } || "",
         topic             => $args{ topic } || "",
         debug             => $args{ debug } || 0,
-        notification      => $args{ notification } ||  {},
-        firebase_api_key  => $args{ firebase_api_key } ||  "",
+        notification      => $args{ notification } || {},
+        registration_ids  => $args{ registration_ids } || [],
+        firebase_api_key  => $args{ firebase_api_key } || "",
     }, $class;
 
     return $self;
@@ -26,47 +26,52 @@ sub new {
 
 sub sendToUser {
 
-    my ($self) = shift;
+    my ($self, $to) = @_;
+    my(%data);
+    $data{to} = $to || $self->{to};
 
-    $data{to}           = $self->{to} if (defined $self->{to});
-    $data{data}         = $self->{data} if (defined $self->{data});
-    $data{notification} = $self->{notification} if (defined $self->{notification});
-
-    my $payload = JSON::objToJson(\%data);
-
-    return $self->_send($payload);
+    return $self->_createPayload(\%data);
 }
 
 sub sendToTopic {
 
-    my ($self) = shift;
+    my ($self, $topic) = @_;
+    my(%data);
+    $data{topic} = $topic || $self->{topic};
 
-    $data{data}         = $self->{data} if (defined $self->{data});
-    $data{topic}        = $self->{topic} if (defined $self->{topic});
-    $data{notification} = $self->{notification} if (defined $self->{notification});
-
-    my $payload = JSON::objToJson(\%data);
-
-    return $self->_send($payload);
+    return $self->_createPayload(\%data);
 }
 
 sub sendToDevices {
 
     my ($self, $registration_ids) = @_;
+    my(%data);
+    $data{registration_ids} = $registration_ids || $self->{registration_ids};
 
-    $data{data}             = $self->{data} if (defined $self->{data});
-    $data{notification}     = $self->{notification} if (defined $self->{notification});
-    $data{registration_ids} = $registration_ids;
+    return $self->_createPayload(\%data);
+}
 
-    my $payload = JSON::objToJson(\%data);
+sub _createPayload {
 
-    return $self->_send($payload);
+	my ($self, $data) = @_;
+
+    $data->{data} 			= $self->{data};
+    $data->{notification} 	= $self->{notification};
+
+    my $payload = JSON::objToJson($data);
+
+	return $self->_send($payload);
 }
 
 sub _send {
 
-    my ($self, $payload) = @_;
-    my $req = HTTP::Request->new( POST => FIREBASE_URL );
+	my ($self, $payload) = @_;
+	
+	if($self->firebase_api_key eq "") {
+		return { msg => "Firebase API Key is invalid" };
+	}
+
+	my $req = HTTP::Request->new( POST => FIREBASE_URL );
     $req->header( "Authorization"  => 'key=' . $self->firebase_api_key );
     $req->header( 'Content-Type' => 'application/json; charset=UTF-8' );
     $req->content( $payload );
