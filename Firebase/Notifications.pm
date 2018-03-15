@@ -104,8 +104,8 @@ Firebase::Notifications - Firebase Cloud Messaging Client Library
   my $firebase_api_key = 'Your API Key';
   my $firebase = FCM::Notifications->new( 
                     firebase_api_key => $firebase_api_key,
-                    notification     => "Message",
-                    data             => "JSON DATA"
+                    notification     => $notification,
+                    data             => $data,
                 );
   my @device_ids = qw(); #registeration ids as array , Max limit  is 1000
                     
@@ -120,6 +120,65 @@ Firebase::Notifications - Firebase Cloud Messaging Client Library
 =head1 DESCRIPTION
 
 Firebase::Notifications is Firebase Cloud Messaging (FCM) Client Library used for sending all type of messages.
+
+=head1 METHODS
+
+=head2 new(%args)
+
+Create a Firebase::Notifications instance.
+
+    my $firebase = Firebase::Notifications->new(
+                        firebase_api_key => $firebase_api_key,
+                        notification     => $notification,
+                        data             => $data,
+                    );
+
+Supported options are:
+
+=over
+
+=item firebase_api_key : Str
+
+Required. Set your API key.
+
+For more information, please check L<< https://firebase.google.com/docs/cloud-messaging/ >>.
+
+=item notification : Hash ref
+
+Optional. Keys can be as C<< https://firebase.google.com/docs/cloud-messaging/ >>.
+
+=item data : hash ref 
+
+Optional. data send to device can carry any keys.
+
+=item registration_ids : Array ref 
+
+Optional. can hold Registered device ids.
+
+=item debug : Int 
+
+Optional. can be 1 or 0. 1 enables debug mode.
+
+=item topic : Str 
+
+Optional. Topic id to which the subscribers need to be alerted.
+
+=item to : Str 
+
+Optional. User Device ID.
+
+=back
+
+=head2 sendToUser($to)
+    $firebase->sendToUser("Device registeration id");
+
+=head2 sendToTopic($topic)
+    $firebase->sendToUser("Topic");
+
+=head2 sendToDevices($registeration_ids)
+    $firebase->sendToUser(["Device registeration id", "id 2", "id 3"]);
+
+    Maximum registeration ids can be used is limited to 1000. If need to alert more than 1000 devices, then we have create batches.
 
 =head1 AUTHOR
 
