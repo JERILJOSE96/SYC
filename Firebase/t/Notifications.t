@@ -39,10 +39,10 @@ subtest sendMessage_test => sub {
     print STDERR $response->{msg};
     ok($response->{msg} eq "OK", "Message Send to devices");
 
-    $response = $firebase->sendToUser( USER_ID );
+    $response = $firebase->sendToUser( USER_ID() );
     ok($response->{msg} eq "OK", "Message Send to user");
 
-    $response = $firebase->sendToTopic( TOPIC );
+    $response = $firebase->sendToTopic( TOPIC() );
     ok($response->{msg} eq "OK", "Message Send to Topic");
 };
 
