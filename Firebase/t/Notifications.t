@@ -3,8 +3,6 @@ use strict;
 use warnings;
 use Test::More;
 
-use lib "/home/devel/diya-jerilj/site_perl/BL";
-
 use Firebase::Notifications;
 use constant API_KEY => 'YOUR API KEY';
 use constant REGISTERATION_ID => [
