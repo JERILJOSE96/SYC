@@ -1,6 +1,6 @@
 package Firebase::Notifications;
 
-use HTTP::Request::Common;
+use HTTP::Request::Common qw( POST );
 use JSON;
 use LWP::UserAgent;
 
@@ -9,7 +9,7 @@ use constant FIREBASE_URL => 'https://fcm.googleapis.com/fcm/send';
 
 sub new {
 
-    my ($class, %args ) = @_;
+    my ( $class, %args ) = @_;
 
     my $self = bless {
         data              => $args{ data }             || {},  # Can be hash ref of data to be send.
@@ -26,54 +26,54 @@ sub new {
 
 sub sendToUser {
 
-    my ($self, $to) = @_;
+    my ( $self, $to ) = @_;
     $self->{to} = $to || $self->{to};
 
     return { msg => "User registeration ID not found." } unless( $self->{to} );
 
     my $payload = JSON::objToJson({
-                            to           => $self->{to},
-                            data         => $self->{data},
-                            notification => $self->{notification},
-                        });
-    return $self->_send($payload);
+                    to           => $self->{to},
+                    data         => $self->{data},
+                    notification => $self->{notification},
+                });
+    return $self->_send( $payload );
 }
 
 sub sendToTopic {
 
-    my ($self, $topic) = @_;
+    my ( $self, $topic ) = @_;
     $self->{topic} = $topic || $self->{topic};
     
     return { msg => "Topic not found." } unless( $self->{topic} );
 
     my $payload = JSON::objToJson({
-                            data         => $self->{data},
-                            topic        => $self->{topic},
-                            notification => $self->{notification},
-                        });
-    return $self->_send($payload);
+                    data         => $self->{data},
+                    topic        => $self->{topic},
+                    notification => $self->{notification},
+                });
+    return $self->_send( $payload );
 }
 
 sub sendToDevices {
 
-    my ($self, $registration_ids) = @_;   
+    my ( $self, $registration_ids ) = @_;   
     $self->{registration_ids} = $registration_ids || $self->{registration_ids};
  
     return { msg => "Device Registration IDs not found." } unless( $self->{registration_ids} );
 
     my $payload = JSON::objToJson({
-                            data             => $self->{data},
-                            notification     => $self->{notification},
-                            registration_ids => $self->{registration_ids},
-                        });
-    return $self->_send($payload);
+                    data             => $self->{data},
+                    notification     => $self->{notification},
+                    registration_ids => $self->{registration_ids},
+                });
+    return $self->_send( $payload );
 }
 
 sub _send {
 
-    my ($self, $payload) = @_;
+    my ( $self, $payload ) = @_;
     
-    if($self->{firebase_api_key} eq "") {
+    if( $self->{firebase_api_key} eq "" ) {
         return { msg => "Firebase API Key is invalid" };
     }
 
@@ -81,17 +81,21 @@ sub _send {
     $req->header( "Authorization"  => 'key=' . $self->{firebase_api_key} );
     $req->header( 'Content-Type' => 'application/json; charset=UTF-8' );
     $req->content( $payload );
-    my $ua = LWP::UserAgent->new;
+
+    my $ua       = LWP::UserAgent->new;
     my $response = $ua->request($req);
 
-    print "RESPONSE: " . Dumper($response) . "\n" if($self->{debug});
+    print "RESPONSE: " . Dumper($response) . "\n" if ($self->{debug});
 
-    return { msg => $response->{_msg}, rc => $response->{_rc}, is_success => $response->{_content}->{success} };
+    return {
+        msg => $response->{_msg},
+        rc  => $response->{_rc},
+        is_success => $response->{_content}->{success}
+    };
 }
 
-=encoding utf-8
 
-=for stopwords
+=pod
 
 =head1 NAME
 
@@ -119,7 +123,8 @@ Firebase::Notifications - Firebase Cloud Messaging Client Library
 
 =head1 DESCRIPTION
 
-Firebase::Notifications is Firebase Cloud Messaging (FCM) Client Library used for sending all type of messages.
+Firebase::Notifications is Firebase Cloud Messaging (FCM) Client Library used for sending all 
+type of messages.
 
 =head1 METHODS
 
@@ -170,15 +175,25 @@ Optional. User Device ID.
 =back
 
 =head2 sendToUser($to)
+
+    Send message to registered user.
+    
     $firebase->sendToUser("Device registeration id");
 
 =head2 sendToTopic($topic)
+    
+    Send message to users subscribed the topic.
+    
     $firebase->sendToUser("Topic");
 
 =head2 sendToDevices($registeration_ids)
+    
+    Send Message or data to registeration ids.
+
     $firebase->sendToUser(["Device registeration id", "id 2", "id 3"]);
 
-    Maximum registeration ids can be used is limited to 1000. If need to alert more than 1000 devices, then we have create batches.
+    Maximum registeration ids can be used is limited to 1000. If we need to alert more than 1000 devices,
+    then send as batches.
 
 =head1 AUTHOR
 
@@ -188,7 +203,7 @@ from xaicron's WWW::Google::Cloud::Messaging.
 =head1 SOURCE
 
 The source code repository for Firebase::Notifications can be found at
-F<http://github.com/JERILJOSE96/SYC/Firebase/>.
+F<https://github.com/****/tree/master/Firebase>.
 
 =head1 COPYRIGHT
 
