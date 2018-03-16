@@ -154,7 +154,7 @@ Optional. Keys can be as C<< https://firebase.google.com/docs/cloud-messaging/ >
 
 =item data : hash ref 
 
-Optional. data send to device can carry any keys.
+Optional. data sent to device can carry any keys.
 
 =item registration_ids : Array ref 
 
@@ -162,11 +162,11 @@ Optional. can hold Registered device ids.
 
 =item debug : Int 
 
-Optional. can be 1 or 0. 1 enables debug mode.
+Optional. can be 1 or 0. 1 enables debug mode. Default : 0
 
 =item topic : Str 
 
-Optional. Topic id to which the subscribers need to be alerted.
+Optional. Topic id for which the subscribers need to be alerted.
 
 =item to : Str 
 
@@ -207,7 +207,7 @@ F<https://github.com/****/tree/master/Firebase>.
 
 =head1 COPYRIGHT
 
-Copyright 2001-2008 by Jeril Jose E<lt>jeriljose@outlook.comE<gt>.
+Copyright 2018 by Jeril Jose E<lt>jeriljose@outlook.comE<gt>.
 
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
