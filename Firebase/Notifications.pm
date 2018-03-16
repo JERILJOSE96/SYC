@@ -105,7 +105,7 @@ Firebase::Notifications - Firebase Cloud Messaging Client Library
   use Firebase::Notifications;
 
   my $firebase_api_key = 'Your API Key';
-  my $firebase = FCM::Notifications->new( 
+  my $firebase = Firebase::Notifications->new( 
                     firebase_api_key => $firebase_api_key,
                     notification     => $notification,
                     data             => $data,
