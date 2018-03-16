@@ -11,8 +11,8 @@ use constant REGISTERATION_ID => [
 use constant USER_ID => "Registered Device ID of the particular user";
 use constant TOPIC   => "YOUR TOPIC";
 
-my $notification = { "title" => "TITLE",
-                      "body"  => "Body of the Message",
+my $notification = { "title" => "Title",
+                      "body"  => "Body of the message",
                   };
 my $data         = { "name" => "name",
                       "role" => "reader",
@@ -29,18 +29,18 @@ my $firebase = Firebase::Notifications->new(
                );
 
 subtest 'Firebase Object Creation Test' => sub {
-    ok( $firebase->isa('Firebase::Notifications'), 'Firebase object Created' );
+    ok( $firebase->isa('Firebase::Notifications'), 'Firebase object created' );
 };
 
 subtest 'Send Message Test' => sub {
     my $response = $firebase->sendToDevices( REGISTERATION_ID() );
-    ok($response->{msg} eq "OK", "Message Send to devices");
+    ok($response->{msg} eq "OK", "Message sent to devices");
 
     $response = $firebase->sendToUser( USER_ID() );
-    ok($response->{msg} eq "OK", "Message Send to user");
+    ok($response->{msg} eq "OK", "Message sent to user");
 
     $response = $firebase->sendToTopic( TOPIC() );
-    ok($response->{msg} eq "OK", "Message Send to Topic");
+    ok($response->{msg} eq "OK", "Message sent to topic");
 };
 
 done_testing;
