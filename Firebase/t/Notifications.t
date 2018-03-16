@@ -28,7 +28,7 @@ my $firebase = Firebase::Notifications->new(
                   data             => $data,
                );
 
-subtest 'Firebase Object Creation test' => sub {
+subtest 'Firebase Object Creation Test' => sub {
     ok( $firebase->isa('Firebase::Notifications'), 'Firebase object Created' );
 };
 
