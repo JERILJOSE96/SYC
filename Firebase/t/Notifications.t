@@ -34,7 +34,6 @@ subtest 'Firebase Object Creation test' => sub {
 
 subtest 'Send Message Test' => sub {
     my $response = $firebase->sendToDevices( REGISTERATION_ID() );
-    print STDERR $response->{msg};
     ok($response->{msg} eq "OK", "Message Send to devices");
 
     $response = $firebase->sendToUser( USER_ID() );
